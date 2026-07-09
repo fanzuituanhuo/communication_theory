@@ -1,6 +1,7 @@
 # 通信原理笔记 · Communication Theory Notes
 
 这里是通信原理课程的 LaTeX 手写风格笔记，使用 [Loom](https://github.com/Polaris-Aeterna/loom-notes) 文档类排版。
+本笔记的模板与排版样式来自 [Polaris-Aeterna/loom-notes](https://github.com/Polaris-Aeterna/loom-notes)。
 
 ## 目录结构
 
@@ -100,6 +101,8 @@ mv main.pdf main-answers.pdf ../pdf/
 4. 分别编译 `main.tex` 和 `main-answers.tex`，检查输出
 5. 把生成的 PDF 移到 `source_coding/pdf/`
 
-## 许可证
+## 模板来源与许可证
 
-笔记内容个人学习使用。Loom 文档类及其仓库遵循原仓库 [MIT 许可证](loom-notes-main/LICENSE)。
+- 本笔记的 LaTeX 模板与手写风格文档类来自 **[Polaris-Aeterna/loom-notes](https://github.com/Polaris-Aeterna/loom-notes)**。
+- `loom-notes-main/` 是该仓库的完整副本，仅作参考使用。
+- 笔记内容个人学习使用。Loom 文档类及其仓库遵循原仓库 [MIT 许可证](loom-notes-main/LICENSE)。
