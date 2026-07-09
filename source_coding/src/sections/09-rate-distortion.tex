@@ -220,18 +220,34 @@ R(\lambda D_1+(1-\lambda)D_2)
 
 \begin{proof}
 设两个最优试验信道分别达到 \((D_1,R(D_1))\) 和 \((D_2,R(D_2))\)。
-以概率 \(\lambda\) 使用第一个信道、以概率 \(1-\lambda\) 使用第二个信道，
-得到一个新的试验信道。其平均失真为
+引入辅助变量 \(\theta\in\{1,2\}\)，以概率 \(\lambda\) 取 \(\theta=1\)、
+以概率 \(1-\lambda\) 取 \(\theta=2\)。令 \(\theta\) 与 \(X\) 独立，
+并在 \(\theta=k\) 时使用第 \(k\) 个试验信道 \(p_k(\hat x|x)\)。
+
+这样得到的新条件分布为
 \[
-\lambda D_1+(1-\lambda)D_2,
+p(\hat x|x)=\lambda p_1(\hat x|x)+(1-\lambda)p_2(\hat x|x),
 \]
-而其互信息为
+其平均失真为
 \[
-\lambda\info(X;\hat X_1)+(1-\lambda)\info(X;\hat X_2)
-=
-\lambda R(D_1)+(1-\lambda)R(D_2).
+\lambda D_1+(1-\lambda)D_2.
 \]
-由于 \(R(D)\) 是所有可行信道中互信息的最小值，因此
+
+下面估计其互信息。由数据处理不等式，
+\[
+\info(X;\hat X)\leq \info(X;\hat X,\theta).
+\]
+而
+\[
+\info(X;\hat X,\theta)=\info(X;\theta)+\info(X;\hat X|\theta).
+\]
+因为 \(\theta\) 与 \(X\) 独立，\(\info(X;\theta)=0\)，所以
+\[
+\info(X;\hat X|\theta)
+=\lambda\info(X;\hat X_1)+(1-\lambda)\info(X;\hat X_2)
+=\lambda R(D_1)+(1-\lambda)R(D_2).
+\]
+因此
 \[
 R(\lambda D_1+(1-\lambda)D_2)
 \leq
@@ -241,8 +257,8 @@ R(\lambda D_1+(1-\lambda)D_2)
 
 \begin{yourturn}
 凸性的关键动作是：用 \(\answerin[2cm]{\text{时间共享}}\) 把两个编码方案组合起来。
-新方案的失真和互信息分别是两个方案对应量的 \(\answerin[2cm]{\text{加权平均}}\)，
-因此率失真函数的图像不会“向上弯”。
+新方案的平均失真是两个方案对应量的 \(\answerin[2cm]{\text{加权平均}}\)，
+而新方案的互信息 \(\info(X;\hat X)\) 是加权平均的 \(\answerin[2cm]{\text{上界}}\)。
 \workspace[2]
 \end{yourturn}
 
