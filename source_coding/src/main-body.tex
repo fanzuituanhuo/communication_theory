@@ -40,6 +40,7 @@
 无失真离散信源编码 & \(H(X)\) & 熵给出平均码长的理论下界，编码要尽量逼近这个下界。\\
 限失真信源编码 & \(R(D)\) & 在允许平均失真 \(D\) 时，用率失真函数描述最小所需码率。\\
 连续信源限失真编码 & \(R(D)\), \(d(x,\hat x)\) & 连续取值需要指定失真度量和重构变量 \(\hat X\)。\\
+矢量量化 & 码本 \(\{y_i\}\), \(D\) & 对多个样值联合量化，利用样值间相关性，优于标量量化。\\
 有记忆信源编码 & 相关性、变换 & 先削弱样本间相关性，再对近似独立的分量编码，例如 transform coding。\\
 \bottomrule
 \end{tabularx}
@@ -53,5 +54,7 @@
 \input{sections/07-mutual-information}
 \input{sections/08-lossless-source-coding}
 \input{sections/09-rate-distortion}
+\input{sections/10-continuous-rate-distortion}
+\input{sections/11-vector-quantization}
 
 \end{document}

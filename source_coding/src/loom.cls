@@ -71,6 +71,14 @@
 \RequirePackage{amsthm}
 \RequirePackage[most]{tcolorbox}
 \tcbuselibrary{skins,breakable}
+% XeTeX has no PDF color stack. Breakable tcolorbox can leave the current
+% color as white after a page break (tcolorbox #120 / TeX.SX 564543).
+% Reset to the current color at finalize so following body text stays visible.
+\makeatletter
+\def\tcb@finalize@environment{%
+  \color{.}%
+  \tcb@layer@dec}
+\makeatother
 \RequirePackage{enumitem}
 \RequirePackage{needspace}
 \RequirePackage{marginnote}
@@ -319,13 +327,17 @@
 \newcommand{\fillin}[1][2.2cm]{\,\underline{\hspace{#1}}\,}
 
 % \answerin[width]{answer} -- the same blank, optionally filled in answer mode
+% Prefer \textcolor (grouped) over a bare \color switch inside \hbox/\underline,
+% which can leak across XeTeX page breaks when tcolorbox breakable has no
+% PDF color stack. Also reassert body ink after the blank.
 \newcommand{\answerin}[2][2.2cm]{%
   \ifshowanswers
     \ifmmode
-      \,\underline{\hbox to #1{\hfil\color{madder}\ensuremath{#2}\hfil}}\,%
+      \,\textcolor{madder}{\underline{\hbox to #1{\hfil\ensuremath{#2}\hfil}}}\,%
     \else
-      \,\underline{\makebox[#1][c]{{\color{madder}#2}}}\,%
+      \,\textcolor{madder}{\underline{\makebox[#1][c]{#2}}}\,%
     \fi
+    \color{inkiron}%
   \else
     \fillin[#1]%
   \fi}
@@ -333,7 +345,8 @@
 % \answertodo{hint}{answer} -- proof gap that can become a worked answer
 \newcommand{\answertodo}[2]{%
   \ifshowanswers
-    {\strandfont\small\color{madder}[\,#2\,]}%
+    {\strandfont\small\textcolor{madder}{[\,#2\,]}}%
+    \color{inkiron}%
   \else
     \TODO{#1}%
   \fi}

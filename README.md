@@ -22,7 +22,9 @@ communication_theory/
 │   │   │   ├── 06-conditional-joint-entropy.tex
 │   │   │   ├── 07-mutual-information.tex
 │   │   │   ├── 08-lossless-source-coding.tex
-│   │   │   └── 09-rate-distortion.tex
+│   │   │   ├── 09-rate-distortion.tex
+│   │   │   ├── 10-continuous-rate-distortion.tex
+│   │   │   └── 11-vector-quantization.tex
 │   │   └── assets/             # 图片等辅助资源
 │   └── pdf/                    # 编译输出的 PDF
 │       ├── main.pdf            # 学生版
@@ -49,6 +51,8 @@ communication_theory/
 7. 互信息：定义、概率形式、性质
 8. 无失真信源编码：定长编码、变长编码、Kraft 不等式、Shannon 第一定理
 9. 信息率失真函数：失真测度、试验信道、R(D) 定义与性质
+10. 连续信源的限失真编码：采样定理、标量量化、均匀 / Lloyd--Max 最佳量化器
+11. 矢量量化：联合量化模型、均方失真、LBG 最优条件（最近邻 + 质心）
 
 ## 双版本机制
 

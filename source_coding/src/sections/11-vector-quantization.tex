@@ -1,0 +1,139 @@
+\section{矢量量化}
+\warmth{0}\quad\whisper{标量量化一次只压一个样值；矢量量化把相邻样值打包，利用它们之间的相关性。}
+
+\begin{strand}
+矢量量化是对采样序列中每 $k$ 个样值的联合量化，属于多维量化。
+它充分利用各样值间的 \answerin[2.5cm]{统计相关性}，因此在相同失真约束下，
+编码效率 \answerin[2cm]{高于标量量化}。
+\end{strand}
+
+\block{基本原理}
+\trigger{先把 $k$ 个样值看成向量，再把 $k$ 维空间切成若干子空间。}
+
+\begin{definition}[矢量量化]
+将模拟信号采样序列中每 $k$ 个样值分一组，得到 $k$ 维向量
+\[
+X=(x_1,x_2,\dots,x_k),
+\]
+其统计特性由联合概率密度 $\pmf(x_1,x_2,\dots,x_k)$ 描述。
+将 $k$ 维空间分割成 $L$ 个子空间 $\{C_i\}_{i=1}^L$，满足
+\[
+\bigcup_{i=1}^L C_i=\mathbb{R}^k.
+\]
+每个子空间 $C_i$ 对应一个 \answerin[2cm]{重构矢量}（也称量化矢量或码字）
+\[
+y_i=(y_{i1},y_{i2},\dots,y_{ik})\in\mathbb{R}^k,\qquad i=1,2,\dots,L.
+\]
+若输入向量落在 $C_i$ 内，即 $X\in C_i$，则将其量化为码字 $y_i$（即重构矢量）：
+\[
+Q(X)=y_i.
+\]
+矢量量化可看作映射
+\[
+Q:\mathbb{R}^k\to\mathbb{R}^k.
+\]
+量化输出就是第 9 节的重构变量：
+\[
+\hat X=Q(X)\in\{y_1,\dots,y_L\}.
+\]
+\end{definition}
+
+\noindent\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+{\color{indigo}量化方式} & {\color{indigo}输入/输出} & \multicolumn{1}{l}{\color{indigo}关键对象}\\
+\midrule
+标量量化 & $Q:\mathbb{R}\to\{y_k\}$ & 决策边界 $\{t_k\}$、量化电平 $\{y_k\}$\\
+矢量量化 & $Q:\mathbb{R}^k\to\mathbb{R}^k$ & 子空间 $\{C_i\}$、码本 $\{y_i\}$\\
+\bottomrule
+\end{tabularx}
+
+\begin{yourturn}
+用一句话复述矢量量化的基本流程：
+\begin{enumerate}[label=(\arabic*)]
+\item 每 \answerin[1cm]{$k$} 个样值组成向量 $X$；
+\item 把 $\mathbb{R}^k$ 分成 \answerin[1.5cm]{$L$} 个子空间 $\{C_i\}$；
+\item 若 $X\in C_i$，则输出码字 \answerin[1.5cm]{$y_i$}。
+\end{enumerate}
+\workspace[2]
+\end{yourturn}
+
+\block{失真测度与平均失真}
+\trigger{最常用的失真度量是均方误差。}
+
+\begin{definition}[矢量量化的失真测度]
+对输入向量 $X$ 与重构矢量 $y_i$，常用均方误差失真：
+\[
+d(X,y_i)=\sum_{j=1}^{k}(x_j-y_{ij})^2=\|X-y_i\|_2^2.
+\]
+\end{definition}
+
+\begin{definition}[总平均失真]
+矢量量化的总平均失真定义为
+\[
+D=\sum_{i=1}^{L}P(X\in C_i)\cdot\mathbb{E}\big[d(X,y_i)\mid X\in C_i\big],
+\]
+也可写成积分形式：
+\[
+D=\sum_{i=1}^{L}P(X\in C_i)\int_{X\in C_i}d(X,y_i)\,\pmf(x)\,dx,\qquad X\in\mathbb{R}^k.
+\]
+其中 $P(X\in C_i)=\answerin[2cm]{\displaystyle\int_{C_i}\pmf(x)\,dx}$ 是向量落入子空间 $C_i$ 的概率。
+\end{definition}
+
+\begin{example}
+设 $k=2$，$L=2$，$P(X\in C_1)=0.6$，$P(X\in C_2)=0.4$。
+若 $\mathbb{E}[d(X,y_1)\mid X\in C_1]=1.2$，
+$\mathbb{E}[d(X,y_2)\mid X\in C_2]=2.5$，则
+\[
+D=0.6\times 1.2+0.4\times 2.5=\answerin[2cm]{1.72}.
+\]
+\end{example}
+
+\block{最佳矢量量化的两个必要条件}
+\trigger{给定码本大小 $L$，想让平均失真 $D$ 最小，就要同时满足最近邻与质心。}
+
+\begin{proposition}[最佳矢量量化的两个必要条件]
+给定码本大小 $L$，使总平均失真 $D$ 最小的矢量量化器满足：
+\begin{enumerate}
+\item \textbf{最近邻原则}（分割空间）：
+\[
+C_i=\{X:d(X,y_i)\le d(X,y_j),\ j\neq i\}
+=\{X:\|X-y_i\|_2^2\le\|X-y_j\|_2^2,\ j\neq i\}.
+\]
+\item \textbf{质心原则}（码字设计）：
+\[
+y_i=\frac{\displaystyle\int_{X\in C_i}X\,\pmf(x)\,dx}
+           {\displaystyle\int_{X\in C_i}\pmf(x)\,dx}.
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{remark}[LBG 算法]
+上述两条件互相依赖：固定码本时最优划分是最近邻，固定划分时最优码字是质心。
+Linde、Buzo 和 Gray（1980）据此给出交替迭代算法，常称为 \answerin[2cm]{LBG 算法}：
+先给定初始码本，再反复用最近邻更新划分、用质心更新码字，直到平均失真收敛。
+\end{remark}
+
+\begin{yourturn}
+对照第 10 节 Lloyd--Max：标量里决策边界在相邻电平的
+\answerin[1.5cm]{中点}，矢量里子空间由
+\answerin[2cm]{最近邻} 原则划分；
+标量里量化电平是区间上的
+\answerin[1.5cm]{条件期望}，矢量里码字是子空间上的
+\answerin[2cm]{质心}。
+\workspace[2]
+\end{yourturn}
+
+\recall{LBG 两条件：最近邻与质心。}
+
+\begin{strand}
+标量量化把每个样值独立离散化，忽略了相邻样值之间的相关性；
+矢量量化把多个样值作为一个向量整体编码，在 $k$ 维空间里用 $L$ 个码字近似整个联合分布。
+这正是第 9 节 $R(D)$ 的实际实现路径之一：码本大小 $L$ 决定每向量码率 $\log_2 L$，
+折合到每样值约为
+\[
+R\approx\dfrac{1}{k}\log_2 L,
+\]
+而 LBG 条件则在给定 $L$ 时最小化平均失真 $D$。
+\end{strand}
+
+\loose{下一节接有记忆信源编码：先削弱相关性，再对近似独立分量编码（如 transform coding）。}

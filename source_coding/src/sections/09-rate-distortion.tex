@@ -3,7 +3,7 @@
 
 \begin{strand}
 有失真信源编码的核心问题是：在允许平均失真不超过 \(D\) 的条件下，寻找最优的
-试验信道 \(\answerin[2.5cm]{p(\hat x|x)}\)，使得互信息
+试验信道 \(\answerin[2.5cm]{\pmf(\hat x|x)}\)，使得互信息
 \(\info(X;\hat X)\) 最小。这个最小值就是 \(\answerin[1.5cm]{R(D)}\)。
 \end{strand}
 
@@ -222,11 +222,11 @@ R(\lambda D_1+(1-\lambda)D_2)
 设两个最优试验信道分别达到 \((D_1,R(D_1))\) 和 \((D_2,R(D_2))\)。
 引入辅助变量 \(\theta\in\{1,2\}\)，以概率 \(\lambda\) 取 \(\theta=1\)、
 以概率 \(1-\lambda\) 取 \(\theta=2\)。令 \(\theta\) 与 \(X\) 独立，
-并在 \(\theta=k\) 时使用第 \(k\) 个试验信道 \(p_k(\hat x|x)\)。
+并在 \(\theta=k\) 时使用第 \(k\) 个试验信道 \(\pmf_k(\hat x|x)\)。
 
 这样得到的新条件分布为
 \[
-p(\hat x|x)=\lambda p_1(\hat x|x)+(1-\lambda)p_2(\hat x|x),
+\pmf(\hat x|x)=\lambda \pmf_1(\hat x|x)+(1-\lambda)\pmf_2(\hat x|x),
 \]
 其平均失真为
 \[

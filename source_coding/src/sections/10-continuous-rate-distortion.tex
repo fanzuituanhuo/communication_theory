@@ -1,0 +1,340 @@
+\section{连续信源的限失真编码}
+\warmth{0}\quad\whisper{连续信源要先变成离散信源，才能进入前几节的编码框架。}
+
+\begin{strand}
+声音、图像等模拟信号在时间和幅度上都是连续的。要把它们纳入限失真编码，
+必须经历\keyword{采样}、\keyword{量化}、\keyword{编码}三步：
+采样把时间离散化，量化把幅度离散化，编码把符号比特化。
+其中采样定理保证时间离散化可以不丢信息，而量化则不可避免地引入失真，
+成为连续信源限失真编码的核心。
+\end{strand}
+
+\block{从模拟信号到比特流}
+\trigger{当题目给出一个连续波形并要求压缩时，先画出这条链路。}
+
+连续信源编码的标准流程可以写成
+\[
+x(t) \xrightarrow{\quad\text{采样}\quad} x[n]=x(nT_s)
+\xrightarrow{\quad\text{量化}\quad} x_q[n]
+\xrightarrow{\quad\text{编码}\quad} \text{比特流}.
+\]
+
+\begin{definition}[采样]
+采样是以固定时间间隔 $T_s$ 从连续信号 $x(t)$ 中提取样本，得到离散时间序列
+\[
+x[n]=x(nT_s),\qquad n\in\mathbb{Z}.
+\]
+$T_s$ 称为 \answerin[2cm]{采样周期}，$f_s=1/T_s$ 称为 \answerin[2cm]{采样频率}。
+这一步完成的是时间的 \answerin[2cm]{离散化}。
+\end{definition}
+
+\begin{definition}[量化]
+量化是把每个采样值的连续幅度映射到有限个 \answerin[2cm]{量化电平} 之一：
+\[
+Q:\mathbb{R}\to\{y_1,y_2,\dots,y_M\}.
+\]
+这一步完成的是幅度的 \answerin[2cm]{离散化}，也是失真的主要来源。
+\end{definition}
+
+\begin{definition}[编码]
+编码是把量化后的离散符号转换成 \answerin[2cm]{二进制码字}，以便存储或传输。
+这一步完成的是 \answerin[2cm]{符号化}。
+\end{definition}
+
+\begin{yourturn}
+把三步与它们的作用对应起来：
+\[
+\text{采样：}\answerin[2.5cm]{\text{时间离散化}},\quad
+\text{量化：}\answerin[2.5cm]{\text{幅度离散化}},\quad
+\text{编码：}\answerin[2.5cm]{\text{符号化}}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\block{采样的频谱直觉}
+
+采样在时域上相当于用冲激串乘以原信号，在频域上使原频谱以 $f_s$ 为周期重复。
+如果重复后的频谱互不重叠，就可以用滤波器把原信号完整恢复出来；
+如果重叠，就会产生 \keyword{混叠}，信息永久丢失。
+
+\block{低通采样定理}
+\trigger{当信号频谱集中在低频附近时，先用这个定理判断最小采样率。}
+
+\begin{theorem}[低通采样定理，Shannon--Nyquist]
+设实信号 $x(t)$ 是带限的，最高频率为 $W$（即频谱只在 $[-W,W]$ 内非零）。
+则当采样频率满足
+\[
+f_s \geq \answerin[1.5cm]{2W}
+\]
+时，$x(t)$ 可由样本 $x(nT_s)$ 完全重建。
+最小采样率 $2W$ 称为 \answerin[2.5cm]{Nyquist 速率}，对应采样周期 $1/(2W)$ 称为 \answerin[2.5cm]{Nyquist 间隔}。
+\end{theorem}
+
+\begin{example}
+某低通信号最高频率 $W=4\,\text{kHz}$，则 Nyquist 速率为
+\[
+f_s \geq 2W = \answerin[2cm]{8\,\text{kHz}}.
+\]
+电话语音通常取 $8\,\text{kHz}$ 采样，正是基于这一结论。
+\end{example}
+
+\begin{yourturn}
+若信号最高频率为 $W=10\,\text{kHz}$，则不产生混叠的最小采样率为
+\[
+f_{s,\min}=\answerin[2cm]{20\,\text{kHz}}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\block{混叠失真}
+
+\begin{definition}[混叠]
+若采样频率不满足 $f_s \geq 2W$，频谱复制后会发生 \answerin[2cm]{重叠}。
+此时不同频率成分在采样后变得不可区分，这种现象称为 \answerin[2cm]{混叠}（aliasing）。
+混叠一旦发生，后续滤波无法恢复原始信号。
+\end{definition}
+
+\begin{yourturn}
+判断下列情况是否会产生混叠：
+\[
+W=3\,\text{kHz},\ f_s=5\,\text{kHz}:\ \answerin[2cm]{\text{会}};\qquad
+W=3\,\text{kHz},\ f_s=8\,\text{kHz}:\ \answerin[2cm]{\text{不会}}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\block{带通采样定理}
+\trigger{当信号是频带受限而不是基带受限时，可以用更低的采样率。}
+
+\begin{proposition}[带通采样定理]
+设实带通信号占据频段 $[f_L,f_H]$，带宽 $B=f_H-f_L$。令 $m=\lfloor f_H/B\rfloor$。
+为保证采样后频谱不重叠，采样率应满足
+\[
+f_s \geq \frac{2f_H}{m}.
+\]
+特别地，若 $f_H$ 是 $B$ 的整数倍，则最低采样率可降到
+\[
+f_{s,\min}=\answerin[1.5cm]{2B},
+\]
+远低于低通采样要求的 $2f_H$。
+\end{proposition}
+
+\begin{example}
+设 $f_L=100\,\text{kHz}$，$f_H=110\,\text{kHz}$，则 $B=10\,\text{kHz}$，$m=\lfloor 110/10\rfloor=11$。
+带通最小采样率为
+\[
+f_{s,\min}=\frac{2\times 110\,\text{kHz}}{11}=\answerin[2cm]{20\,\text{kHz}},
+\]
+而低通采样要求 $2f_H=220\,\text{kHz}$。
+\end{example}
+
+\begin{yourturn}
+设带通信号 $f_L=20\,\text{kHz}$，$f_H=30\,\text{kHz}$，则带宽 $B=\answerin[1.5cm]{10\,\text{kHz}}$，
+$m=\answerin[1.5cm]{3}$，带通最小采样率为
+\[
+f_{s,\min}=\answerin[2cm]{20\,\text{kHz}}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\block{重建}
+
+\begin{proposition}[理想重建]
+若采样满足相应的采样定理，则原信号可由样本通过理想滤波器恢复。
+
+对低通信号：用增益为 $T_s$、截止频率为 $f_s/2$ 的
+\answerin[2.8cm]{理想低通滤波器}，恢复公式为
+\[
+x(t)=\sum_{n=-\infty}^{\infty} x(nT_s)\,
+\operatorname{sinc}\!\left(\frac{t-nT_s}{T_s}\right),
+\]
+其中 $\operatorname{sinc}(u)=\sin(\pi u)/(\pi u)$。
+
+对带通信号：用中心频率位于信号频带中心的
+\answerin[2.8cm]{理想带通滤波器} 恢复。
+\end{proposition}
+
+\begin{proof}[基带信号的理想重建（从卷积出发）]
+只证低通情形；带通情形只需把低通滤波器换成覆盖信号频带的带通滤波器。
+
+采样在时域上等价于用冲激串调制原信号，得到
+\[
+x_s(t)=x(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)
+      =\sum_{n=-\infty}^{\infty} x(nT_s)\,\delta(t-nT_s).
+\]
+它的频谱 $X_s(f)$ 是原频谱 $X(f)$ 以 $f_s$ 为周期的重复；低通采样定理保证这些副本互不重叠。
+
+为恢复 $x(t)$，用一个理想低通滤波器保留基带并补偿采样引入的幅度缩放：
+\[
+H(f)=
+\begin{cases}
+T_s, & |f|\leq f_s/2,\\
+0, & |f|>f_s/2.
+\end{cases}
+\]
+其冲激响应为
+\[
+h(t)=\mathscr{F}^{-1}\{H(f)\}
+    =T_s\int_{-f_s/2}^{f_s/2} e^{\mathrm{j}2\pi f t}\,\mathrm{d}f
+    =\operatorname{sinc}(t/T_s).
+\]
+
+把采样序列 $x_s(t)$ 与 $h(t)$ 做卷积，即得重建信号
+\[
+\begin{aligned}
+\hat{x}(t)
+&=x_s(t)*h(t)\\
+&=\int_{-\infty}^{\infty}
+   \sum_{n=-\infty}^{\infty} x(nT_s)\,\delta(\tau-nT_s)\,
+   h(t-\tau)\,\mathrm{d}\tau\\
+&=\sum_{n=-\infty}^{\infty} x(nT_s)\,h(t-nT_s).
+\end{aligned}
+\]
+代入 $h(t)=\operatorname{sinc}(t/T_s)$，就得到 sinc 插值公式
+\[
+x(t)=\sum_{n=-\infty}^{\infty} x(nT_s)\,
+\operatorname{sinc}\!\left(\frac{t-nT_s}{T_s}\right).
+\]
+\end{proof}
+
+\begin{yourturn}
+复述理想重建证明的关键动作：
+\begin{enumerate}[label=(\arabic*)]
+\item 采样在时域写成冲激串调制：
+      $x_s(t)=x(t)\sum_n\delta(t-nT_s)=\sum_n x(nT_s)\delta(t-nT_s)$；
+\item 用增益为 \answerin[1cm]{$T_s$}、截止频率为 \answerin[1.5cm]{$f_s/2$} 的理想低通滤波器取出基带；
+\item 求出滤波器冲激响应 $h(t)=\answerin[2.5cm]{\operatorname{sinc}(t/T_s)}$；
+\item 将 $x_s(t)$ 与 $h(t)$ 做 \answerin[1.5cm]{卷积}，得到 sinc 插值公式。
+\end{enumerate}
+\workspace[2]
+\end{yourturn}
+
+\block{标量量化的基本模型}
+
+\begin{definition}[标量量化]
+标量量化是对采样序列样值进行量化。
+它是一个从 $\mathbb{R}$ 到量化电平集合的映射：
+\[
+Q:\mathbb{R}\to\{y_1,y_2,\dots,y_M\}.
+\]
+具体地，每个实值样本 $x$ 被划分到某个区间，并用该区间对应的代表值表示：
+\[
+Q(x)=y_k,\quad \text{当 } x\in(t_{k-1},t_k],\ k=1,2,\dots,M.
+\]
+其中 $M$ 是 \answerin[1.5cm]{量化电平数}，$\{t_k\}$ 是 \answerin[2cm]{决策边界}，$\{y_k\}$ 是 \answerin[2cm]{量化电平}。
+量化输出就是第 9 节的重构变量：
+\[
+\hat X=Q(X)\in\{y_1,\dots,y_M\}.
+\]
+\end{definition}
+
+\block{量化噪声、功率与信噪比}
+
+\begin{definition}[量化误差与量化噪声功率]
+量化误差定义为
+\[
+e=x-Q(x).
+\]
+若把 $e$ 看成加性噪声，则量化噪声功率为
+\[
+N_q=\mathbb{E}\big[(X-Q(X))^2\big].
+\]
+\end{definition}
+
+\begin{definition}[量化信噪比]
+设输入信号功率为 $P_X=\mathbb{E}[X^2]$，则量化信噪比定义为
+\[
+\mathrm{SNR}=\dfrac{P_X}{N_q},
+\]
+常用分贝表示为
+\[
+\mathrm{SNR}_{\mathrm{dB}}=10\log_{10}\dfrac{P_X}{N_q}.
+\]
+\end{definition}
+
+\begin{example}
+若输入功率 $P_X=4$，量化噪声功率 $N_q=0.01$，则
+\[
+\mathrm{SNR}=400,\qquad
+\mathrm{SNR}_{\mathrm{dB}}=26\,\text{dB}.
+\]
+\end{example}
+
+\block{均匀量化器}
+\trigger{最简单也最常用的量化器：所有区间一样大。}
+
+\begin{definition}[均匀量化器]
+若各量化区间长度相等，即
+\[
+\Delta=t_k-t_{k-1},\qquad k=1,2,\dots,M,
+\]
+则称为均匀量化器，$\Delta$ 称为 \answerin[1.5cm]{量化步长}。
+\end{definition}
+
+\begin{proposition}[均匀输入的量化噪声功率]
+设输入 $X$ 在 $[-V,V]$ 上均匀分布，采用 $M$ 电平均匀量化器，则量化步长 $\Delta=2V/M$，量化噪声功率为
+\[
+N_q=\answerin[2.4cm]{\dfrac{\Delta^2}{12}}.
+\]
+\end{proposition}
+
+\begin{example}
+设 $X$ 在 $[-1,1]$ 均匀分布，用 $M=8$ 电平均匀量化，则 $\Delta=2/8=0.25$，
+\[
+N_q=\dfrac{(0.25)^2}{12}\approx\answerin[2.4cm]{5.21\times 10^{-3}}.
+\]
+信号功率 $P_X=1/3$，所以
+\[
+\mathrm{SNR}=\dfrac{1/3}{5.21\times 10^{-3}}\approx\answerin[2cm]{64}
+\approx \answerin[2cm]{18.1\,\text{dB}}.
+\]
+\end{example}
+
+\begin{yourturn}
+把均匀量化 SNR 与量化比特数 $R=\log_2 M$ 的关系填出来：
+\[
+\mathrm{SNR}_{\mathrm{dB}}\approx 6.02R + C,
+\]
+其中 $C$ 是与 \answerin[3cm]{\text{输入信号统计特性}} 有关的常数。
+对 $[-V,V]$ 均匀输入，$C=\answerin[2cm]{0\,\text{dB}}$。
+\workspace[2]
+\end{yourturn}
+
+\block{最佳量化器}
+\trigger{给定量化电平数，想让量化噪声最小，就要求解 Lloyd--Max 条件。}
+
+\begin{proposition}[Lloyd--Max 最优条件]
+给定量化电平数 $M$，使量化噪声功率 $N_q$ 最小的标量量化器满足：
+\begin{enumerate}
+\item 决策边界在两相邻量化电平中点：
+\[
+t_k=\frac{y_k+y_{k+1}}{2},\qquad k=1,2,\dots,M-1.
+\]
+\item 每个量化电平是对应区间上的条件期望：
+\[
+y_k=\mathbb{E}[X\mid t_{k-1}\leq X<t_k].
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+把 $N_q$ 对 $t_k$ 和 $y_k$ 分别求偏导并令其为零即可。
+对边界 $t_k$ 求导，导数为零要求 $t_k$ 到 $y_k$ 与 $y_{k+1}$ 的距离相等，即中点条件。
+对电平 $y_k$ 求导，导数为零要求 $y_k$ 是区间 $[t_{k-1},t_k]$ 上的条件均值，即质心条件。
+这两个条件通常需要 \answertodo{用什么方法联合求解}{迭代}。
+\end{proof}
+
+\begin{yourturn}
+对均匀输入，Lloyd--Max 条件退化为均匀量化器：因为条件期望正好落在区间
+\answerin[2cm]{中点}，决策边界也正好在相邻电平 \answerin[2cm]{中点}。
+\workspace[2]
+\end{yourturn}
+
+\begin{strand}
+采样定理解决的是“时间离散化会不会丢信息”；
+量化解决的是“幅度离散化能省多少比特、会引入多少失真”。
+把二者合起来，就得到连续信源限失真编码的实际框架：先采样，再量化，最后对量化符号做无失真或限失真编码。
+这正是第 9 节 $R(D)$ 的物理入口：量化器的设计直接决定了失真 $D$，而编码器在 $D$ 约束下逼近 $R(D)$。
+\end{strand}
+
+\loose{下一节将讨论矢量量化：把多个样本一起量化，利用样本间相关性进一步降低率失真。}
