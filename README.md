@@ -20,7 +20,9 @@ communication_theory/
 │   │   │   ├── 04-memoryless-example.tex
 │   │   │   ├── 05-entropy.tex
 │   │   │   ├── 06-conditional-joint-entropy.tex
-│   │   │   └── 07-mutual-information.tex
+│   │   │   ├── 07-mutual-information.tex
+│   │   │   ├── 08-lossless-source-coding.tex
+│   │   │   └── 09-rate-distortion.tex
 │   │   └── assets/             # 图片等辅助资源
 │   └── pdf/                    # 编译输出的 PDF
 │       ├── main.pdf            # 学生版
@@ -45,6 +47,8 @@ communication_theory/
 5. 信息熵：定义、二进制熵函数、最大熵
 6. 条件熵与联合熵：链式法则、Shannon 不等式
 7. 互信息：定义、概率形式、性质
+8. 无失真信源编码：定长编码、变长编码、Kraft 不等式、Shannon 第一定理
+9. 信息率失真函数：失真测度、试验信道、R(D) 定义与性质
 
 ## 双版本机制
 

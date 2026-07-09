@@ -1,0 +1,330 @@
+\section{信息率失真函数 \texorpdfstring{\(R(D)\)}{R(D)}}
+\warmth{0}\quad\whisper{这一节把互信息变成压缩极限：如果允许一点失真，最少需要保留多少信息？}
+
+\begin{strand}
+有失真信源编码的核心问题是：在允许平均失真不超过 \(D\) 的条件下，寻找最优的
+试验信道 \(\answerin[2.5cm]{p(\hat x|x)}\)，使得互信息
+\(\info(X;\hat X)\) 最小。这个最小值就是 \(\answerin[1.5cm]{R(D)}\)。
+\end{strand}
+
+\block{从无失真到允许失真}
+\trigger{当题目不再要求 \(\hat X=X\)，而是给出一个“平均误差不超过 \(D\)”时，就进入率失真框架。}
+
+在数字通信系统中，信源编码器与译码器的整体作用可以抽象为
+\[
+X \xrightarrow{\quad\text{编码/译码}\quad} \hat X.
+\]
+无失真编码要求 \(\hat X=X\)；有失真编码只要求二者之间的
+\(\answerin[2cm]{平均失真}\) 不超过某个允许值 \(D\)。
+
+\begin{definition}[有失真编码的目标]
+设信源 \(X\) 的字母表为 \(\Xcal=\{x_1,x_2,\cdots,x_n\}\)，重构符号字母表为
+\(\hat{\Xcal}=\{\hat x_1,\hat x_2,\cdots,\hat x_m\}\)。
+有失真信源编码的目标是：在
+\[
+\mathbb{E}\left[d(X,\hat X)\right] \leq \answerin[1.2cm]{D}
+\]
+的条件下，使编码所需的信息率尽可能 \(\answerin[1.5cm]{小}\)。
+\end{definition}
+
+\block{失真测度}
+\begin{definition}[失真测度]
+失真测度是一个非负函数
+\[
+d:\Xcal\times\hat{\Xcal}\to \mathbb{R}^{+},
+\]
+其中 \(d(x_i,\hat x_j)\) 表示把 \(x_i\) 重构为 \(\hat x_j\) 所产生的失真程度。
+通常要求
+\[
+d(x_i,\hat x_j)\geq 0,\qquad d(x_i,x_i)=\answerin[1cm]{0}.
+\]
+\end{definition}
+
+\begin{example}[汉明失真]
+对于离散信源，汉明失真只关心“对”或“错”：
+\[
+d(x_i,\hat x_j)=
+\begin{cases}
+\answerin[1cm]{0}, & i=j,\\
+\answerin[1cm]{1}, & i\neq j.
+\end{cases}
+\]
+它的含义是：译码正确时失真为零，任何错误都计为同样大小的失真。
+\end{example}
+
+\begin{example}[平方误差失真]
+对于连续信源，常用的失真测度是
+\[
+d(x,\hat x)=\answerin[2cm]{(x-\hat x)^2}.
+\]
+若 \(X,\hat X\) 为向量，则可推广为欧氏距离平方
+\(\|\mathbf{x}-\hat{\mathbf{x}}\|^2\)。
+\end{example}
+
+\begin{yourturn}
+汉明失真和平方误差失真的侧重点有何不同？
+\[
+\text{汉明失真：}\quad d\text{ 只与 }\answerin[2cm]{\text{是否相同}}\text{ 有关。}
+\]
+\[
+\text{平方误差失真：}\quad d\text{ 还与 }\answerin[2cm]{\text{误差大小}}\text{ 有关。}
+\]
+\workspace[2]
+\end{yourturn}
+
+
+\block{平均失真与允许失真度}
+设信源分布为 \(\pmf(x_i)\)，试验信道为 \(\pmf(\hat x_j|x_i)\)，则联合分布为
+\[
+\pmf(x_i,\hat x_j)=\pmf(x_i)\pmf(\hat x_j|x_i).
+\]
+
+\begin{definition}[平均失真]
+平均失真定义为
+\[
+\bar d
+=
+\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,\hat x_j)d(x_i,\hat x_j)
+=
+\mathbb{E}\left[d(X,\hat X)\right].
+\]
+\end{definition}
+
+\begin{definition}[允许失真度]
+允许失真度 \(D\) 是平均失真的上界。一个试验信道可行，当且仅当
+\[
+\bar d
+=
+\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i)\pmf(\hat x_j|x_i)d(x_i,\hat x_j)
+\leq \answerin[1cm]{D}.
+\]
+\end{definition}
+
+\begin{yourturn}
+当 \(D\) 变小时，对重构质量的要求变 \(\answerin[1.5cm]{高}\)，
+因此所需信息率通常会变 \(\answerin[1.5cm]{大}\)；
+当 \(D\) 变大时，信息率可以变 \(\answerin[1.5cm]{小}\)。
+\workspace[2]
+\end{yourturn}
+
+\block{试验信道}
+\begin{definition}[试验信道]
+在率失真理论中，信源编码与译码的整体过程抽象为条件概率分布
+\(\pmf(\hat x_j|x_i)\)，称为 \textbf{试验信道}。
+它不是一个物理信道，而是描述编码/译码造成的随机映射。
+\end{definition}
+
+所有满足平均失真约束的试验信道构成集合
+\[
+\mathcal{P}_D
+=
+\left\{
+\pmf(\hat x|x):
+\mathbb{E}\left[d(X,\hat X)\right]\leq D
+\right\}.
+\]
+也就是说，\(\pmf(\hat x|x)\in \mathcal{P}_D\) 当且仅当
+\[
+\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i)\pmf(\hat x_j|x_i)d(x_i,\hat x_j)
+\leq D.
+\]
+
+\block{互信息作为“必须保留的信息量”}
+\begin{proposition}[互信息的概率形式]
+原信源 \(X\) 与重构信源 \(\hat X\) 之间的互信息为
+\[
+\info(X;\hat X)
+=
+\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i)\pmf(\hat x_j|x_i)
+\log
+\frac{\pmf(\hat x_j|x_i)}{\pmf(\hat x_j)},
+\]
+其中
+\[
+\pmf(\hat x_j)=\sum_{i=1}^{n}\pmf(x_i)\pmf(\hat x_j|x_i).
+\]
+\end{proposition}
+
+互信息衡量：重构信源 \(\hat X\) 中保留了多少关于原信源 \(X\) 的信息。
+在有失真压缩中，\(\info(X;\hat X)\) 越小，意味着需要保留的信息越少，
+相应编码所需的信息率越 \(\answerin[1cm]{低}\)。
+
+
+\block{信息率失真函数的定义}
+\begin{definition}[信息率失真函数]
+信息率失真函数定义为
+\[
+R(D)
+=
+\min_{\pmf(\hat x|x)\in \mathcal{P}_D}
+\info(X;\hat X).
+\]
+展开写即
+\[
+R(D)
+=
+\min_{\pmf(\hat x|x)}
+\info(X;\hat X)
+\]
+满足约束
+\[
+\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i)\pmf(\hat x_j|x_i)d(x_i,\hat x_j)
+\leq D,
+\]
+\[
+\sum_{j=1}^{m}\pmf(\hat x_j|x_i)=1,
+\quad i=1,2,\cdots,n,
+\]
+\[
+\pmf(\hat x_j|x_i)\geq 0,
+\quad i=1,2,\cdots,n,\ j=1,2,\cdots,m.
+\]
+\end{definition}
+
+\begin{strand}
+\(R(D)\) 的含义是：\textbf{在平均失真不超过 \(D\) 的条件下，编码所需的最小信息率}。
+它是一个 \(\answerin[3cm]{\text{带约束的优化问题}}\)，优化变量是试验信道
+\(\pmf(\hat x|x)\)，目标函数是互信息。
+\end{strand}
+
+\block{率失真函数的基本性质}
+
+\begin{proposition}[非负性]
+由于互信息非负，\(\info(X;\hat X)\geq 0\)，所以
+\[
+R(D)\geq \answerin[1cm]{0}.
+\]
+\end{proposition}
+
+\begin{proposition}[单调非增性]
+若 \(D_1<D_2\)，则
+\[
+R(D_1)\ \answerin[1.5cm]{\geq}\ R(D_2).
+\]
+直观含义：允许的失真越大，可选的试验信道越多，所需的最小信息率不会增加。
+\end{proposition}
+
+\begin{proposition}[凸性]
+率失真函数 \(R(D)\) 是关于 \(D\) 的凸函数，即对 \(0\leq \lambda\leq 1\)，有
+\[
+R(\lambda D_1+(1-\lambda)D_2)
+\leq
+\lambda R(D_1)+(1-\lambda)R(D_2).
+\]
+\end{proposition}
+
+\begin{proof}
+设两个最优试验信道分别达到 \((D_1,R(D_1))\) 和 \((D_2,R(D_2))\)。
+以概率 \(\lambda\) 使用第一个信道、以概率 \(1-\lambda\) 使用第二个信道，
+得到一个新的试验信道。其平均失真为
+\[
+\lambda D_1+(1-\lambda)D_2,
+\]
+而其互信息为
+\[
+\lambda\info(X;\hat X_1)+(1-\lambda)\info(X;\hat X_2)
+=
+\lambda R(D_1)+(1-\lambda)R(D_2).
+\]
+由于 \(R(D)\) 是所有可行信道中互信息的最小值，因此
+\[
+R(\lambda D_1+(1-\lambda)D_2)
+\leq
+\lambda R(D_1)+(1-\lambda)R(D_2).
+\]
+\end{proof}
+
+\begin{yourturn}
+凸性的关键动作是：用 \(\answerin[2cm]{\text{时间共享}}\) 把两个编码方案组合起来。
+新方案的失真和互信息分别是两个方案对应量的 \(\answerin[2cm]{\text{加权平均}}\)，
+因此率失真函数的图像不会“向上弯”。
+\workspace[2]
+\end{yourturn}
+
+\begin{proposition}[连续性]
+在通常条件下，\(R(D)\) 是关于 \(D\) 的连续函数。
+\end{proposition}
+
+
+\block{两个特殊点}
+
+\begin{proposition}[零失真点]
+当 \(D=0\) 时，有失真编码退化为无失真编码。
+
+对于离散信源，若失真测度满足
+\[
+d(x_i,\hat x_j)=0 \iff x_i=\hat x_j,
+\]
+则零失真时必须有 \(\hat X=X\)，因此
+\[
+R(0)=\info(X;X)=\answerin[2cm]{H(X)}.
+\]
+
+对于连续信源，要求完全无失真通常需要无限精度，因此
+\[
+R(0)\to \answerin[2cm]{\infty}.
+\]
+\end{proposition}
+
+\begin{proposition}[最大允许失真]
+存在一个阈值 \(D_{\max}\)，使得当 \(D\geq D_{\max}\) 时，
+可以不传输任何关于 \(X\) 的信息，而在接收端固定输出某个重构符号 \(\hat x\)。
+此时 \(X\) 与 \(\hat X\) 独立，\(\info(X;\hat X)=\answerin[1cm]{0}\)，故
+\[
+R(D)=0,\qquad D\geq D_{\max}.
+\]
+其中
+\[
+D_{\max}
+=
+\min_{\hat x\in \hat{\Xcal}}
+\sum_{i=1}^{n}\pmf(x_i)d(x_i,\hat x).
+\]
+\end{proposition}
+
+\begin{yourturn}
+补全 \(D_{\max}\) 的直观含义：在 \(\answerin[2cm]{\text{不发送信息}}\)
+的情况下，接收端固定选择一个最优重构符号，
+所能达到的平均失真为 \(\answerin[2cm]{\text{最小}}\)。
+\workspace[2]
+\end{yourturn}
+
+\block{率失真曲线的整体图像}
+综合以上性质，\(R(D)\) 的典型形状满足：
+\[
+R(0)=H(X),\qquad R(D)\text{ 单调非增且凸},\qquad R(D)=0\ (D\geq D_{\max}).
+\]
+它刻画了 \(\answerin[3cm]{\text{压缩率}}\) 与
+\(\answerin[3cm]{\text{重构质量}}\) 之间的最优折中。
+
+\begin{yourturn}
+用一句话概括 \(R(D)\) 回答的问题：
+\[
+\text{若允许平均失真不超过 }D\text{，最少需要保留多少}
+\answerin[2cm]{\text{比特}}\text{ 来描述信源？}
+\]
+\workspace[2]
+\end{yourturn}
+
+\block{本节小结}
+\noindent\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+{\color{indigo}概念} & \multicolumn{1}{l}{\color{indigo}作用}\\
+\midrule
+失真测度 \(d(x,\hat x)\) & 刻画原符号与重构符号之间的差异。\\
+平均失真 \(\bar d=\mathbb{E}[d(X,\hat X)]\) & 描述整体重构误差。\\
+允许失真度 \(D\) & 平均失真的上界。\\
+试验信道 \(\pmf(\hat x|x)\) & 描述编码/译码整体造成的随机映射。\\
+率失真函数 \(R(D)\) & 在失真约束下，编码所需的最小信息率。\\
+\bottomrule
+\end{tabularx}
+
+\recall{为什么 \(R(D)\) 关于 \(D\) 是单调非增的？从可行集合
+\(\mathcal{P}_D\) 的变化来解释。}
+
+\loose{下一章可以接一个具体信源的 \(R(D)\) 计算，例如二元对称信源在汉明失真下的率失真函数。}
