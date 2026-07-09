@@ -1,0 +1,146 @@
+\section{互信息：不确定性的减少量}
+\warmth{0}\quad\whisper{互信息把“收到一个信源后，对另一个信源多了解了多少”变成公式。}
+
+\begin{strand}
+如果 \(X\) 是信源，\(Y\) 是信宿或接收端观察到的量，那么互信息 \(\info(X;Y)\)
+衡量的是：观察 \(Y\) 以后，关于 \(X\) 的不确定性平均减少了多少。
+\end{strand}
+
+\block{定义与等价写法}
+\begin{definition}[互信息]
+互信息定义为
+\[
+\info(X;Y)=H(X)-H(X|Y).
+\]
+等价地，也可以写成
+\[
+\info(X;Y)=H(Y)-H(Y|X)
+=H(X)+H(Y)-H(X,Y).
+\]
+因此，互信息可以看成 \(X\) 与 \(Y\) 共享的那部分信息。
+\end{definition}
+
+\begin{proposition}[概率形式]
+互信息也可以写成联合分布与边缘分布的比值：
+\[
+\info(X;Y)
+=\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,y_j)
+\log\frac{\pmf(x_i,y_j)}{\pmf(x_i)\pmf(y_j)}.
+\]
+等价地，
+\[
+\info(X;Y)
+=\mathbb{E}\left[\log\frac{\pmf(X|Y)}{\pmf(X)}\right]
+=\mathbb{E}\left[\log\frac{\pmf(Y|X)}{\pmf(Y)}\right].
+\]
+\end{proposition}
+
+\begin{proof}
+从
+\[
+\info(X;Y)=H(X)-H(X|Y)
+\]
+出发。因为
+\[
+\pmf(x_i)=\sum_{j=1}^{m}\pmf(x_i,y_j),
+\]
+所以
+\[
+\begin{aligned}
+H(X)
+&=-\sum_{i=1}^{n}\pmf(x_i)\log \pmf(x_i)\\
+&=-\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,y_j)\log \pmf(x_i).
+\end{aligned}
+\]
+另一方面，
+\[
+H(X|Y)
+=-\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,y_j)\log \pmf(x_i|y_j).
+\]
+两式相减，得到
+\[
+\begin{aligned}
+\info(X;Y)
+&=\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,y_j)
+\left[\log \pmf(x_i|y_j)-\log \pmf(x_i)\right]\\
+&=\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,y_j)
+\log\frac{\pmf(x_i|y_j)}{\pmf(x_i)}.
+\end{aligned}
+\]
+再由条件概率
+\[
+\pmf(x_i|y_j)=\frac{\pmf(x_i,y_j)}{\pmf(y_j)}
+\]
+可得
+\[
+\info(X;Y)
+=\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,y_j)
+\log\frac{\pmf(x_i,y_j)}{\pmf(x_i)\pmf(y_j)}.
+\]
+这也说明
+\[
+\info(X;Y)
+=\mathbb{E}\left[\log\frac{\pmf(X|Y)}{\pmf(X)}\right].
+\]
+同理从 \(\info(X;Y)=H(Y)-H(Y|X)\) 出发，可以得到
+\[
+\info(X;Y)
+=\mathbb{E}\left[\log\frac{\pmf(Y|X)}{\pmf(Y)}\right].
+\]
+\end{proof}
+
+\begin{yourturn}
+复述互信息等价式证明的关键动作：
+\[
+H(X)=-\sum_i \pmf(x_i)\log\pmf(x_i)
+=-\sum_{i,j}\answerin[2.8cm]{\pmf(x_i,y_j)}\log\pmf(x_i),
+\]
+所以 \(H(X)-H(X|Y)\) 可以合并成同一个 \((i,j)\) 双重求和。
+\workspace[2]
+\end{yourturn}
+
+\block{性质}
+\noindent\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+{\color{indigo}性质} & \multicolumn{1}{l}{\color{indigo}含义}\\
+\midrule
+非负性 & \(\info(X;Y)\geq 0\)。平均来看，观察不会让不确定性“负减少”。\\
+对称性 & \(\info(X;Y)=\info(Y;X)\)。\(Y\) 中关于 \(X\) 的信息量，等于 \(X\) 中关于 \(Y\) 的信息量。\\
+独立时为零 & 若 \(X\) 与 \(Y\) 独立，则 \(\info(X;Y)=0\)。\\
+完全确定时最大 & 若 \(Y\) 能完全确定 \(X\)，则 \(\info(X;Y)=H(X)\)。\\
+\bottomrule
+\end{tabularx}
+
+\begin{remark}
+在固定信道转移概率 \(\pmf(y|x)\) 时，\(\info(X;Y)\) 是输入分布 \(\pmf(x)\) 的凹函数；
+在固定输入分布 \(\pmf(x)\) 时，\(\info(X;Y)\) 是信道转移概率 \(\pmf(y|x)\) 的凸函数。
+这解释了两个后续优化问题：固定信道 \(\pmf(y|x)\) 时，最大化 \(\info(X;Y)\) 得信道容量；
+固定失真约束时，最小化 \(\info(X;\hat X)\) 得率失真函数 \(R(D)\)。
+\end{remark}
+
+\begin{yourturn}
+用熵的图像直觉填空：
+\[
+\info(X;Y)=H(X)-H(X|Y)
+\]
+表示观察 \(Y\) 以后，关于 \(X\) 的不确定性减少了
+\answerin[3cm]{\info(X;Y)}。
+\workspace[2]
+\end{yourturn}
+
+\begin{yourturn}
+若 \(X\) 与 \(Y\) 独立，则 \(\pmf(x_i,y_j)=\pmf(x_i)\pmf(y_j)\)。代入概率形式可得
+\[
+\info(X;Y)=\sum_{i,j}\pmf(x_i,y_j)\log\answerin[1.5cm]{1}=\answerin[1.5cm]{0}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\loose{下一步接信源编码：无失真看 \(H(X)\)，限失真看
+\(R(D)=\min \info(X;\hat X)\)。}

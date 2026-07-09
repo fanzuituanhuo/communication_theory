@@ -1,0 +1,257 @@
+\section{无失真离散信源编码}
+\warmth{0}\quad\whisper{这一节把前面的熵变成编码结论：若允许很长的分组，平均码率或平均码长可以逼近 \(H(X)\)。}
+
+\begin{strand}
+无失真离散信源编码的核心问题是：把长度为 \(L\) 的信源序列 \(X^L\)
+映射成码字，再由码字恢复出 \(\hat X^L\)。如果分组足够长，高概率序列集中在典型集里，
+于是只需要给典型序列分配码字，所需码字数量大约是 \(2^{L H(X)}\)。
+\end{strand}
+
+\block{编码模型}
+\trigger{当题目出现 \(X^L\)、码字集合 \(\mathcal{U}^k\)、编码映射和译码映射时，先画这条链。}
+
+\begin{definition}[分组信源编码]
+设离散无记忆信源的长度 \(L\) 输出序列取值于 \(\mathcal{X}^L\)，码符号集合为
+\(\mathcal{U}\)，每个码字长度为 \(k\)，则码字集合为 \(\mathcal{U}^k\)。编码映射和译码映射分别为
+\[
+f:\mathcal{X}^L\to \mathcal{U}^k,
+\qquad
+g:\mathcal{U}^k\to \mathcal{X}^L.
+\]
+整个过程可写为
+\[
+X^L \xrightarrow{\ f\ } U^k \xrightarrow{\ g\ } \hat X^L,
+\]
+其中 \(\hat X^L\) 是译码恢复出来的
+\answerin[3cm]{信源序列}。
+\end{definition}
+
+\begin{remark}
+若 \(k\) 为固定值，就是等长编码；若不同信源序列允许使用不同长度的码字，就是变长编码。
+本节先看分组等长编码的基本极限。
+\end{remark}
+
+\block{什么叫无失真}
+\begin{definition}[严格无失真与渐近无失真]
+严格无失真要求对每个输入序列都有
+\[
+\hat X^L=X^L.
+\]
+更常用的渐近无失真用错误概率描述：
+\[
+P_e^{(L)}=P\{\hat X^L\neq X^L\}.
+\]
+若当 \(L\to\infty\) 时存在一族编码方案使
+\[
+P_e^{(L)}\to 0,
+\]
+则称可以实现渐近无失真编码。
+\end{definition}
+
+\begin{yourturn}
+把“严格无失真”和“渐近无失真”的差别填出来：
+\[
+\text{严格无失真：}\hat X^L=\answerin[2cm]{X^L},
+\qquad
+\text{渐近无失真：}P_e^{(L)}\to\answerin[1.4cm]{0}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\block{码率}
+\begin{definition}[编码速率]
+若码符号集合 \(\mathcal{U}\) 的大小为 \(M\)，每个信源分组长度为 \(L\)，码字长度为 \(k\)，
+则编码速率定义为
+\[
+R=\frac{k}{L}\log_2 M
+\]
+bit/source symbol。它表示平均每个信源符号需要多少二进制位来表示。
+\end{definition}
+
+\begin{example}
+若用二进制码字，\(M=2\)，则
+\[
+R=\frac{k}{L}.
+\]
+若每个 \(L=4\) 的信源分组用 \(k=6\) 个二进制码元表示，则码率为
+\[
+R=\frac{6}{4}=1.5
+\]
+bit/source symbol。
+\end{example}
+
+\begin{yourturn}
+若码符号集合大小为 \(M=4\)，长度 \(L=5\) 的信源序列被编码成长度 \(k=6\) 的码字，则
+\[
+R=\frac{k}{L}\log_2 M
+=\frac{6}{5}\log_2 4
+=\answerin[1.6cm]{2.4}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\block{熵给出的可达极限}
+\begin{theorem}[离散无记忆信源无失真编码定理]
+设离散无记忆信源 \(X\) 的熵为 \(H(X)\)。对任意 \(\epsilon>0\)，若编码速率满足
+\[
+R=\frac{k}{L}\log_2 M>H(X)+\epsilon,
+\]
+则当 \(L\) 足够大时，存在一族分组编码使错误概率
+\[
+P_e^{(L)}<\delta
+\]
+其中 \(\delta>0\) 可以任意小。反过来，若
+\[
+R<H(X),
+\]
+则不可能实现渐近无失真编码。
+\end{theorem}
+
+\begin{remark}
+这个定理的严格证明要用典型序列和大数定律，后面讲无失真信源编码定理时再完整证明。
+这里先保留结论和直觉：高概率序列集中在典型集里，典型集大小约为
+\(2^{L H(X)}\)，所以只要码字数能覆盖典型集，错误概率就可以随 \(L\) 增大而变小。
+\end{remark}
+
+\block{典型序列的角色}
+\begin{definition}[典型集]
+对长度为 \(L\) 的信源序列，把概率接近 \(2^{-L H(X)}\) 的高概率序列放入典型集，
+记作 \(A_\epsilon^{(L)}\)。当 \(L\) 足够大时，
+\[
+P\{X^L\in A_\epsilon^{(L)}\}>1-\delta,
+\]
+并且典型集大小大约满足
+\[
+\left|A_\epsilon^{(L)}\right|\leq 2^{L(H(X)+\epsilon)}.
+\]
+\end{definition}
+
+\begin{strand}
+典型集解释了为什么“不是所有 \(n^L\) 个序列都同等重要”。虽然长度为 \(L\) 的序列总数是
+\(n^L\)，但实际概率质量几乎都集中在典型集里。编码器只需要重点照顾典型序列，
+非典型序列造成的错误概率可以随着 \(L\) 增大而变小。
+\end{strand}
+
+\begin{yourturn}
+用典型集语言补完整个可达性思路：
+\[
+P\{X^L\in A_\epsilon^{(L)}\}>1-\delta,
+\qquad
+\left|A_\epsilon^{(L)}\right|\leq \answerin[3.4cm]{2^{L(H(X)+\epsilon)}}.
+\]
+因此只要
+\[
+M^k\geq \left|A_\epsilon^{(L)}\right|,
+\]
+就有足够多码字覆盖典型序列，也就是
+\[
+R=\frac{k}{L}\log_2 M>\answerin[2.6cm]{H(X)+\epsilon}.
+\]
+\workspace[3]
+\end{yourturn}
+
+\block{变长编码：平均码长逼近熵}
+\begin{strand}
+等长编码把每个长度为 \(L\) 的信源序列都塞进同样长的码字；变长编码则让高概率序列用短码字，
+低概率序列用长码字。它关心的不是固定码字长度 \(k\)，而是平均码长 \(\bar K\)。
+\end{strand}
+
+\begin{definition}[平均码长]
+设长度为 \(L\) 的信源序列 \(x^L\) 被编码成 \(m\) 元码字，码长为 \(K(x^L)\)。
+平均码长定义为
+\[
+\bar K=\sum_{x^L\in\Xcal^L}\pmf(x^L)K(x^L).
+\]
+因此
+\[
+\frac{\bar K}{L}
+\]
+表示每个信源符号平均需要的 \(m\) 元码符号数。
+\end{definition}
+
+\begin{theorem}[变长编码定理]
+设 \(X\) 为离散无记忆信源，熵为 \(H(X)\)，码符号集合大小为 \(m\)。
+对长度为 \(L\) 的信源扩展进行唯一可译变长编码时，任意唯一可译码都满足
+\[
+\frac{\bar K}{L}\geq \frac{H(X)}{\log_2 m}.
+\]
+另一方面，存在一族 \(m\) 元即时码，使
+\[
+\frac{\bar K}{L}<\frac{H(X)}{\log_2 m}+\frac{1}{L}.
+\]
+也就是说，通过增大分组长度 \(L\)，变长编码的每符号平均码长可以任意逼近熵下界。
+\end{theorem}
+
+\begin{proof}
+先看下界。任意唯一可译码的码长必须满足 Kraft 不等式，因此它诱导的平均码长不可能低于
+信源扩展熵对应的 \(m\) 元码符号数：
+\[
+\bar K\geq \frac{H(X^L)}{\log_2 m}.
+\]
+由于信源无记忆，
+\[
+H(X^L)=L H(X),
+\]
+所以
+\[
+\frac{\bar K}{L}\geq \frac{H(X)}{\log_2 m}.
+\]
+
+再看可达性。对每个序列取 Shannon 码长
+\[
+K(x^L)=\left\lceil -\log_m \pmf(x^L)\right\rceil,
+\]
+则
+\[
+K(x^L)<-\log_m \pmf(x^L)+1.
+\]
+对 \(x^L\) 求平均，得到
+\[
+\bar K<\frac{H(X^L)}{\log_2 m}+1
+=\frac{L H(X)}{\log_2 m}+1.
+\]
+两边除以 \(L\)，即得
+\[
+\frac{\bar K}{L}<\frac{H(X)}{\log_2 m}+\frac{1}{L}.
+\]
+\end{proof}
+
+\begin{yourturn}
+复述变长编码定理的关键夹逼：
+\[
+\frac{H(X)}{\log_2 m}
+\leq
+\frac{\bar K}{L}
+<
+\answerin[3.2cm]{\frac{H(X)}{\log_2 m}+\frac{1}{L}}.
+\]
+当 \(m=2\) 时，\(\log_2 m=1\)，所以
+\[
+H(X)\leq \frac{\bar K}{L}<\answerin[2cm]{H(X)+\frac{1}{L}}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\begin{definition}[编码效率]
+把平均码长换算成 bit/source symbol：
+\[
+R=\frac{\bar K}{L}\log_2 m.
+\]
+编码效率定义为
+\[
+\eta=\frac{H(X)}{R}.
+\]
+当 \(R\) 越接近 \(H(X)\)，编码效率越接近 \(1\)。
+\end{definition}
+
+\begin{yourturn}
+若采用二进制变长编码，且分组长度 \(L\) 足够大，使 \(1/L<\epsilon\)，则定理给出
+\[
+H(X)\leq \frac{\bar K}{L}<H(X)+\answerin[1.4cm]{\epsilon}.
+\]
+这说明二进制变长编码的平均码长可以逼近
+\answerin[2cm]{\(H(X)\)}。
+\workspace[2]
+\end{yourturn}
+
+\recall{为什么无失真离散信源编码的极限码率是 \(H(X)\)，而不是 \(\log n\)？}

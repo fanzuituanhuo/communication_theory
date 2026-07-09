@@ -1,0 +1,70 @@
+\section{信源分类与单符号信源}
+\warmth{0}\quad\whisper{先看一次输出一个随机符号的信源，这是后面序列信源的基本积木。}
+
+\begin{strand}
+信源可以按输出的对象来分：如果每次输出一个符号，叫单符号信源；
+如果连续输出一串符号，叫消息序列信源。也可以按取值集合分为离散信源和连续信源。
+\end{strand}
+
+\block{分类地图}
+\noindent\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+{\color{indigo}分类角度} & \multicolumn{1}{l}{\color{indigo}常见类型}\\
+\midrule
+按取值集合 & 离散信源，也可称数字信源；连续信源，也可称模拟信源。\\
+按输出结构 & 单符号信源；消息序列信源，也就是随机过程形式的信源。\\
+\bottomrule
+\end{tabularx}
+
+\begin{definition}[离散单符号信源]
+设离散单符号信源为随机变量 \(X\)，其取值集合为
+\[
+\Xcal=\{x_1,x_2,\cdots,x_n\}.
+\]
+若每个符号 \(x_i\) 出现的概率为 \(\pmf(x_i)\)，则该信源的统计描述为
+\[
+\left(
+\begin{array}{cccc}
+x_1 & x_2 & \cdots & x_n\\
+\pmf(x_1) & \pmf(x_2) & \cdots & \pmf(x_n)
+\end{array}
+\right),
+\]
+其中
+\[
+0\leq \pmf(x_i)\leq 1,\qquad
+\sum_{i=1}^{n}\pmf(x_i)=\answerin[1.2cm]{1}.
+\]
+\end{definition}
+
+\begin{definition}[连续单符号信源]
+若信源输出 \(X\) 是连续随机变量，例如 \(X\in(a,b)\)，则通常用概率密度函数
+\(\pmf(x)\) 描述。这里的 \(\pmf(x)\) 不是某一点的概率；当 \(dx\) 很小时，
+\[
+\pmf(x)\,dx \approx P\{x\leq X<x+dx\}.
+\]
+更一般地，
+\[
+P\{a\leq X\leq b\}=\int_a^b \pmf(x)\,dx.
+\]
+也就是说，\(\pmf(x)\) 描述的是单位长度小区间中的
+\answerin[3.4cm]{概率密度}。
+\end{definition}
+
+\begin{remark}
+离散情形用“概率质量”看每个符号，连续情形用“概率密度”看区间附近。
+二者的共同点是：都在回答信源输出落在某些取值上的可能性。
+本章聚焦离散信源；连续信源及其微分熵将在后续课程中展开。
+\end{remark}
+
+\begin{yourturn}
+判断下面两个对象分别属于哪类信源：
+\[
+\text{二进制符号 } \{0,1\}:\ \answerin[3cm]{离散信源},
+\qquad
+\text{模拟电压 } X(t):\ \answerin[3cm]{连续信源}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\recall{为什么连续信源中 \(\pmf(x)\) 通常叫概率密度而不是概率？}

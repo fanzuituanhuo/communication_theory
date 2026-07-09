@@ -1,0 +1,46 @@
+\section{通信系统与信源编码}
+\warmth{0}\quad\whisper{这部分回答：为什么一上来就要研究信源的统计特性。}
+
+\begin{strand}
+通信的起点是\keyword{信源}，它产生待传输的信息。信道只是承载信号的通道；
+真正决定编码能否有效、系统能否可靠的，是信源和信道各自的统计特性。
+\end{strand}
+
+\block{通信技术的两个性能维度}
+\trigger{当题目问“通信系统为什么要统计建模”时，先分清两个目标。}
+\noindent\begin{tabularx}{\linewidth}{@{}l L@{}}
+\toprule
+{\color{indigo}目标} & \multicolumn{1}{l}{\color{indigo}依赖的统计特性}\\
+\midrule
+有效性 & 主要取决于信源统计特性。信源越有冗余，越有压缩空间。\\
+可靠性 & 主要取决于信道统计特性。噪声、干扰和差错概率决定抗干扰设计。\\
+\bottomrule
+\end{tabularx}
+
+\begin{definition}[信源]
+信源是产生消息或信息的对象。它的输出通常不是确定值，而是具有
+\answerin[3.4cm]{随机性} 的随机对象。
+\end{definition}
+
+\begin{definition}[信道]
+信道是传递信号经过的通道。它会影响传输的可靠性，因此常用信道的
+\answerin[3.4cm]{统计特性} 来描述噪声和差错。
+\end{definition}
+
+\begin{definition}[信源编码]
+信源编码是在分析信源统计特性的基础上，用尽可能少的码率表示信源输出。
+无失真编码要求接收端能够完全恢复原消息；限失真编码允许在给定失真约束内恢复
+\answerin[3cm]{近似消息}。
+\end{definition}
+
+\begin{yourturn}
+把“有效性”和“可靠性”各自对应的对象填出来：
+\[
+\text{有效性}\longleftrightarrow \answerin[3cm]{信源},
+\qquad
+\text{可靠性}\longleftrightarrow \answerin[3cm]{信道}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\recall{信源编码为什么首先要研究信源统计特性？}

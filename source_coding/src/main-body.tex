@@ -1,0 +1,56 @@
+\runningthread{信源统计特性}
+
+\begin{document}
+
+\loomcover
+  {信源编码的统计基础}
+  {通信原理：从概率模型到压缩极限}
+  {fanzuituanhuo}
+  {\today}
+
+\section*{总览地图}
+\warmth{0}\quad\whisper{先抓住一条主线：信源编码先建模不确定性，再讨论在什么失真约束下能压到多低。}
+
+\begin{strand}
+本页笔记的 spine 是：\keyword{先建立信源统计模型，再选择失真约束，最后用信息度量给出可达到的压缩极限}。
+单符号、序列、连续和有记忆信源给出“要编码的对象”；熵、条件熵、联合熵和互信息给出
+“能压缩到哪里”的语言。后面的无失真编码、限失真编码和变换编码都会沿着这条线展开。
+\end{strand}
+
+\block{一眼对照}
+\noindent\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+{\color{indigo}对象} & {\color{indigo}符号} & \multicolumn{1}{l}{\color{indigo}统计描述}\\
+\midrule
+离散单符号信源 & \(X,\ \Xcal=\{x_1,x_2,\cdots,x_n\}\) & 用概率质量函数 \(\pmf(x_i)\) 描述每个符号出现的概率。\\
+连续单符号信源 & \(X\in(a,b)\) & 用概率密度函数 \(\pmf(x)\) 描述取值附近的概率强度（本章不展开）。\\
+离散消息序列信源 & \(X^L\) & 用 \(L\) 维联合分布 \(\pmf(x_1,x_2,\cdots,x_L)\) 描述整段序列。\\
+无记忆序列信源 & \(X_1,\cdots,X_L\) 相互独立 & 联合概率可以分解为各符号概率的乘积。\\
+信息熵 & \(H(X)\) & 度量一个信源平均不确定性，等于自信息量的数学期望。\\
+条件熵与联合熵 & \(H(Y|X),\ H(X,Y)\) & 描述已知一个信源后另一个信源的剩余不确定性，以及两个信源整体的不确定性。\\
+互信息 & \(\info(X;Y)\) & 描述观察 \(Y\) 后关于 \(X\) 的不确定性减少量。\\
+\bottomrule
+\end{tabularx}
+
+\block{后续路线}
+\noindent\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+{\color{indigo}编码问题} & {\color{indigo}核心量} & \multicolumn{1}{l}{\color{indigo}本章前置知识的作用}\\
+\midrule
+无失真离散信源编码 & \(H(X)\) & 熵给出平均码长的理论下界，编码要尽量逼近这个下界。\\
+限失真信源编码 & \(R(D)\) & 在允许平均失真 \(D\) 时，用率失真函数描述最小所需码率。\\
+连续信源限失真编码 & \(R(D)\), \(d(x,\hat x)\) & 连续取值需要指定失真度量和重构变量 \(\hat X\)。\\
+有记忆信源编码 & 相关性、变换 & 先削弱样本间相关性，再对近似独立的分量编码，例如 transform coding。\\
+\bottomrule
+\end{tabularx}
+
+\input{sections/01-overview}
+\input{sections/02-source-types}
+\input{sections/03-sequence-source}
+\input{sections/04-memoryless-example}
+\input{sections/05-entropy}
+\input{sections/06-conditional-joint-entropy}
+\input{sections/07-mutual-information}
+\input{sections/08-lossless-source-coding}
+
+\end{document}

@@ -1,0 +1,125 @@
+\section{信息熵：单符号离散信源的不确定性}
+\warmth{0}\quad\whisper{熵不是某次收到的信息量，而是信源在统计意义上的平均不确定性。}
+
+\begin{strand}
+前面我们已经把信源写成概率分布。信息熵 \(H(X)\) 做的事，是把这个概率分布压缩成一个数：
+信源平均有多不确定，平均需要多少信息才能消除这种不确定性。
+\end{strand}
+
+\block{定义}
+\trigger{当题目给出离散信源 \(X\)、取值集合 \(\Xcal=\{x_1,\cdots,x_n\}\) 及概率 \(\pmf(x_i)\) 时，用这个公式。}
+
+\begin{definition}[信息熵]
+设离散单符号信源 \(X\) 的概率分布为 \(\pmf(x_i)\)。它的信息熵定义为
+\[
+H(X)=\mathbb{E}\big[-\log \pmf(X)\big]
+=-\sum_{i=1}^{n}\pmf(x_i)\log \pmf(x_i).
+\]
+其中 \(\mathbb{E}\) 表示数学期望。信息熵度量的是信源的
+\answerin[4cm]{平均不确定性}。
+\end{definition}
+
+\block{对数底与单位}
+\noindent\begin{tabularx}{\linewidth}{@{}l l L@{}}
+\toprule
+{\color{indigo}对数底} & {\color{indigo}单位} & \multicolumn{1}{l}{\color{indigo}含义}\\
+\midrule
+\(2\) & bit & 最常用，表示二进制信息单位。\\
+\(e\) & nat & 自然对数单位。\\
+\(10\) & Hartley 或十进制单位 & 十进制对数单位。\\
+\bottomrule
+\end{tabularx}
+
+\begin{remark}
+若某个符号概率为 \(0\)，约定 \(0\log 0=0\)。直觉上，不可能发生的符号不会贡献平均不确定性。
+\end{remark}
+
+\block{二进制信源}
+\begin{example}[二进制熵函数]
+设二进制信源 \(X\in\{0,1\}\)，且
+\[
+\pmf(0)=p,\qquad \pmf(1)=1-p.
+\]
+若以 \(2\) 为对数底，则
+\[
+H(X)=-p\log_2 p-(1-p)\log_2(1-p)\triangleq h(p).
+\]
+当 \(p=\frac12\) 时，两个符号等概，二进制熵达到最大值 \(1\) bit。
+\end{example}
+
+\block{\(n\) 进制信源的最大熵}
+\begin{proposition}[等概分布最大熵]
+若 \(n\) 进制离散信源 \(X\) 的取值集合为 \(\Xcal=\{x_1,\cdots,x_n\}\)，则
+\[
+H(X)\leq \log n.
+\]
+等号成立当且仅当
+\[
+\pmf(x_1)=\pmf(x_2)=\cdots=\pmf(x_n)=\frac{1}{n}.
+\]
+\end{proposition}
+
+\begin{proof}
+记 \(p_i=\pmf(x_i)\)。若某些 \(p_i=0\)，这些项按约定
+\(0\log 0=0\)，不会贡献熵。先考虑所有 \(p_i>0\) 的情形：
+\[
+H(X)=-\sum_{i=1}^{n}p_i\log p_i
+=\sum_{i=1}^{n}p_i\log\frac{1}{p_i}.
+\]
+因为 \(\log t\) 是凹函数，由 Jensen 不等式，
+\[
+\sum_{i=1}^{n}p_i\log\frac{1}{p_i}
+\leq
+\log\left(\sum_{i=1}^{n}p_i\frac{1}{p_i}\right)
+=\log n.
+\]
+因此 \(H(X)\leq \log n\)。
+
+等号成立时，Jensen 不等式的等号条件要求
+\[
+\frac{1}{p_1}=\frac{1}{p_2}=\cdots=\frac{1}{p_n},
+\]
+也就是
+\[
+p_1=p_2=\cdots=p_n.
+\]
+再由 \(\sum_{i=1}^{n}p_i=1\)，得到
+\[
+p_1=p_2=\cdots=p_n=\frac{1}{n}.
+\]
+反过来，如果 \(p_i=1/n\)，则
+\[
+H(X)=-\sum_{i=1}^{n}\frac{1}{n}\log\frac{1}{n}
+=\log n,
+\]
+所以等号确实成立。
+
+若只有 \(k<n\) 个符号概率非零，则同样的证明给出
+\[
+H(X)\leq \log k<\log n,
+\]
+因此在 \(n\) 个可能符号中达到最大熵时，必须所有符号都以相同概率出现。
+\end{proof}
+
+\begin{yourturn}
+复述最大熵证明的关键一步：把
+\[
+H(X)=\sum_{i=1}^{n}p_i\log\frac{1}{p_i}
+\]
+看成对凹函数 \(\log t\) 的加权平均，因此由 Jensen 不等式得到
+\[
+H(X)\leq
+\log\left(\sum_{i=1}^{n}p_i\frac{1}{p_i}\right)
+=\answerin[1.6cm]{\log n}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\begin{strand}
+\keyword{信息量}描述一次接收后不确定性减少了多少；\keyword{信息熵}描述接收前信源平均有多不确定。
+前者偏向一次事件，后者偏向整个信源的统计平均。
+对无失真离散信源编码，熵会成为平均码长的理论下界；对限失真编码，这个角色会由
+\(R(D)\) 接过去。
+\end{strand}
+
+\recall{为什么等概信源的不确定性最大？}

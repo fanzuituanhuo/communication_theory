@@ -1,0 +1,93 @@
+\section{条件熵与联合熵}
+\warmth{0}\quad\whisper{两个随机信源放在一起时，要区分“总不确定性”和“知道一个以后剩下多少”。}
+
+\begin{strand}
+现在有两个离散信源 \(X\) 和 \(Y\)。如果知道了 \(X\)，对 \(Y\) 的不确定性通常会下降。
+这个剩余不确定性就是条件熵；把 \((X,Y)\) 当成一个整体看，就是联合熵。
+\end{strand}
+
+\block{条件熵}
+\trigger{当题目出现“已知 \(X\) 后 \(Y\) 还剩多少不确定性”时，用 \(H(Y|X)\)。}
+
+\begin{definition}[条件熵]
+设 \(X\) 的取值为 \(x_1,\cdots,x_n\)，\(Y\) 的取值为 \(y_1,\cdots,y_m\)。条件熵定义为
+\[
+H(Y|X)
+=-\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,y_j)\log \pmf(y_j|x_i)
+=\mathbb{E}\big[-\log \pmf(Y|X)\big].
+\]
+它度量的是已知 \(X\) 后，\(Y\) 的
+\answerin[4cm]{剩余不确定性}。
+\end{definition}
+
+\begin{definition}[联合熵]
+联合熵把二元随机向量 \((X,Y)\) 看成一个整体：
+\[
+H(X,Y)
+=-\sum_{i=1}^{n}\sum_{j=1}^{m}
+\pmf(x_i,y_j)\log \pmf(x_i,y_j).
+\]
+它度量两个信源共同输出时的总体不确定性。
+\end{definition}
+
+\begin{proposition}[熵的链式法则]
+联合熵可以分解为
+\[
+H(X,Y)=H(X)+H(Y|X)
+=H(Y)+H(X|Y).
+\]
+\end{proposition}
+
+\begin{proof}
+从联合概率的链式分解开始：
+\[
+\pmf(x_i,y_j)=\pmf(x_i)\pmf(y_j|x_i).
+\]
+代入联合熵定义，并把乘积的对数拆成和：
+\[
+-\sum_{i,j}\pmf(x_i,y_j)\log\big[\pmf(x_i)\pmf(y_j|x_i)\big]
+\]
+\[
+=-\sum_{i,j}\pmf(x_i,y_j)\log \pmf(x_i)
+-\sum_{i,j}\pmf(x_i,y_j)\log \pmf(y_j|x_i).
+\]
+第一项中 \(\sum_j\pmf(x_i,y_j)=\pmf(x_i)\)，所以它等于 \(H(X)\)；
+第二项正是 \(H(Y|X)\)。因此
+\[
+H(X,Y)=H(X)+H(Y|X).
+\]
+同理也可以先写 \(\pmf(x_i,y_j)=\pmf(y_j)\pmf(x_i|y_j)\)，得到
+\[
+H(X,Y)=H(Y)+H(X|Y).
+\]
+\end{proof}
+
+\begin{yourturn}
+复述链式法则证明中最关键的一步：
+\[
+\log\big[\pmf(x_i)\pmf(y_j|x_i)\big]
+=\answerin[4cm]{\log \pmf(x_i)+\log \pmf(y_j|x_i)}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\block{Shannon 不等式}
+\begin{proposition}[条件不会增加不确定性]
+\[
+H(Y|X)\leq H(Y),\qquad H(X|Y)\leq H(X).
+\]
+也就是说，知道另一个随机变量，只会减少或保持不确定性，不会增加平均不确定性。
+\end{proposition}
+
+\begin{yourturn}
+若 \(X\) 和 \(Y\) 相互独立，则 \(Y\) 在已知 \(X\) 后没有变得更确定，因此
+\[
+H(Y|X)=\answerin[2cm]{H(Y)},
+\qquad
+H(X,Y)=\answerin[2cm]{H(X)}+\answerin[2cm]{H(Y)}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\recall{为什么 \(H(X,Y)\) 既可以写成 \(H(X)+H(Y|X)\)，也可以写成 \(H(Y)+H(X|Y)\)？}

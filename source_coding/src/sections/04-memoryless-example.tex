@@ -1,0 +1,62 @@
+\section{无记忆信源与等概二进制例子}
+\warmth{0}\quad\whisper{无记忆是最常见的简化：过去的符号不影响现在的符号。}
+
+\begin{strand}
+真实序列信源可能有记忆，比如自然语言中前后字符相关。无记忆信源是一个重要特例：
+序列中各符号统计独立，所以联合分布可以直接分解成乘积。
+\end{strand}
+
+\begin{definition}[无记忆离散信源]
+若序列中的各个符号相互统计独立，则称该序列信源为无记忆信源。此时
+\[
+\pmf(x_1,x_2,\cdots,x_L)=
+\prod_{\ell=1}^{L}\pmf(x_\ell).
+\]
+它的核心条件是序列中前后符号之间没有
+\answerin[3.6cm]{统计依赖}。
+\end{definition}
+
+\begin{remark}
+有记忆信源的相关性比较复杂，不能简单把联合概率写成各项乘积。
+例如某些文字、语音或图像信源，当前符号往往受前面符号影响。
+后面的有记忆信源编码会围绕一个目标展开：先解除或削弱相关性，再分别编码近似独立的分量。
+\end{remark}
+
+\begin{example}[三位等概二进制序列]
+设单个符号 \(0\) 和 \(1\) 等概出现：
+\[
+\pmf(0)=\pmf(1)=\frac{1}{2}.
+\]
+当 \(L=3\) 时，可能序列共有 \(2^3=8\) 个。若信源无记忆，则每个具体序列的概率为
+\[
+\pmf(x_1,x_2,x_3)
+=\pmf(x_1)\pmf(x_2)\pmf(x_3)
+=\frac{1}{2}\cdot\frac{1}{2}\cdot\frac{1}{2}
+=\frac{1}{8}.
+\]
+\end{example}
+
+\begin{yourturn}
+仍设 \(p(0)=p(1)=1/2\)。请写出序列 \(101\) 的概率计算：
+\[
+\pmf(101)=\pmf(1)\pmf(0)\pmf(1)
+=\answerin[1.5cm]{\frac{1}{2}}\cdot\answerin[1.5cm]{\frac{1}{2}}\cdot\answerin[1.5cm]{\frac{1}{2}}
+=\answerin[1.5cm]{\frac{1}{8}}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\begin{yourturn}
+如果 \(p(0)=0.7,\ p(1)=0.3\)，且仍为无记忆信源，请计算序列 \(001\) 的概率：
+\[
+\pmf(001)=\answerin[1.5cm]{0.7}\cdot\answerin[1.5cm]{0.7}\cdot\answerin[1.5cm]{0.3}
+=\answerin[2cm]{0.147}.
+\]
+\workspace[2]
+\end{yourturn}
+
+\begin{strand}
+复习时可以按这个顺序默写：信源产生消息，信源编码利用统计冗余；单符号信源写
+\(X\) 和 \(\pmf(x_i)\)；序列信源写 \(X^L\) 和联合分布；无记忆时联合分布变成乘积。
+接下来要问的是：这些概率分布对应的“不确定性”到底有多大，以及这种不确定性如何限制压缩码率？
+\end{strand}
