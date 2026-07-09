@@ -272,18 +272,15 @@ R(\lambda D_1+(1-\lambda)D_2)
 \begin{proposition}[零失真点]
 当 \(D=0\) 时，有失真编码退化为无失真编码。
 
-对于离散信源，若失真测度满足
-\[
-d(x_i,\hat x_j)=0 \iff x_i=\hat x_j,
-\]
-则零失真时必须有 \(\hat X=X\)，因此
+若信源为离散信源，且零失真等价于完全正确恢复，则
 \[
 R(0)=\info(X;X)=\answerin[2cm]{H(X)}.
 \]
 
-对于连续信源，要求完全无失真通常需要无限精度，因此
+若信源为连续信源，在平方误差等常见失真度量下，随着 \(D\to 0\)，
+通常有
 \[
-R(0)\to \answerin[2cm]{\infty}.
+R(D)\to \answerin[2cm]{\infty}.
 \]
 \end{proposition}
 
